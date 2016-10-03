@@ -1,0 +1,4 @@
+base:
+  '*':
+    - vim
+    - vagrant-openssh

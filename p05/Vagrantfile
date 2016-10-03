@@ -1,0 +1,22 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$vagrant_root = File.dirname(__FILE__)
+
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu1604"
+
+  config.vm.provider "virtualbox" do |v|
+    v.linked_clone = true
+    v.memory = "1024"
+    v.cpus = "1"
+  end
+
+  config.vm.define "mgt001" do |mgt001|
+
+    mgt001.vm.hostname = "mgt001.example.com"
+
+  end
+
+end
