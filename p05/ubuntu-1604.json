@@ -122,6 +122,7 @@
       "vm_name": "{{ user `name` }}",
       "vmx_data": {
         "cpuid.coresPerSocket": "1",
+	"ethernet0.pciSlotNumber": "32",
         "memsize": "512",
         "numvcpus": "2"
       }
@@ -136,7 +137,8 @@
                   "sed -i -e '/Defaults\\s\\+env_reset/a Defaults\\texempt_group=sudo' /etc/sudoers",
                   "sed -i -e 's/%sudo\\s*ALL=(ALL:ALL) ALL/%sudo\\tALL=(ALL) NOPASSWD:ALL/g' /etc/sudoers",
                   "adduser vagrant sudo",
-                  "apt-get -y install python-git" ]
+                  "apt-get -y install python-git"
+                ]
     },
     {
       "type": "shell",
@@ -154,6 +156,22 @@
       ]
     },
     {
+      "only": [ "vmware-iso" ],
+      "type": "shell",
+      "environment_vars": [
+        "HOME_DIR=/home/vagrant",
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "execute_command": "{{.Vars}} sudo -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "scripts/sshd.sh",
+        "scripts/vagrant.sh"
+      ]
+    },
+    {
+      "only": [ "virtualbox-iso" ],
       "type": "salt-masterless",
       "local_state_tree": "salt/states",
       "local_pillar_roots": "salt/pillar",
